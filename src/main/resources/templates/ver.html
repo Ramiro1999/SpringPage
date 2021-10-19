@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+<header th:replace="layout/layout :: header"></header>
+
+
+<div class="container py-5">
+    <div class="card bg-light border-4">
+        <div class="card-header" th:text="${titulo}"></div>
+        <div class="card-body">
+
+            <h4 class="card-title">
+                <a class="btn btn-primary btn xs" th:href="@{/factura/form/}+${cliente.get().id}" th:text="'Crear factura'"></a>
+            </h4>
+
+
+            <img th:if="${#strings.length(cliente.get().foto)}" class="img-thumbnail rounded float-left " style="max-width: 25%;"
+                 th:src="@{'/uploads/'+ ${cliente.get().foto}}" th:alt="${cliente.get().foto}"/>
+
+            <ul class="list-group">
+               <li class="list-group-item page-item active" th:text="${cliente.get().nombre}"></li>
+                <li class="list-group-item" th:text="${cliente.get().apellido}"></li>
+                <li class="list-group-item" th:text="${cliente.get().DNI}"></li>
+                <li class="list-group-item" th:text="${cliente.get().email}"></li>
+                <li class="list-group-item" th:text="${#calendars.format(cliente.get().createAt,'dd/MM/yyyy')}"></li>
+            </ul>
+    <div th:if="${#lists.isEmpty(cliente.get().getFacturas())}" class="alert alert-info my-4" th:text="'No hat facturas asignadas para el cliente ' + ${cliente.get().nombre} + ' '+ ${cliente.get().apellido}"></div>
+            <table th:if="${not #lists.isEmpty(cliente.get().getFacturas())}" class="table table-bordered table-striped my-4">
+                <thead class="thead-dark">
+                <tr>
+                    <th>folio</th>
+                    <th>descripcion</th>
+                    <th>fecha</th>
+                    <th>total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="factura : ${cliente.get().getFacturas()}">
+                    <td th:text="${factura.id}"></td>
+                    <td th:text="${factura.descripcion}">
+                    <td th:text="${#calendars.format(factura.fecha,'dd/MM/yyyy')}">
+                    <td th:text="${factura.total}+'$'">
+
+                    </td>
+
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="layout/layout :: footer"></footer>
+
+
+</body>
+</html>
