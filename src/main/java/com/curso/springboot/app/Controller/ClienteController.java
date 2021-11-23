@@ -70,10 +70,10 @@ public class ClienteController {
         if(id>0){
             cliente = clienteService.buscarCliente(id);
             if(cliente.isEmpty()){
-                flash.addFlashAttribute("error", "El cliente no existe!");
+                flash.addFlashAttribute("danger", "El cliente no existe!");
             }
         }else{
-            flash.addFlashAttribute("error", "El cliente no existe!");
+            flash.addFlashAttribute("danger", "El cliente no existe!");
             return "redirect:/listar";
         }
         String mensaje= (cliente.get().getId() != null)?"Editar cliente":"Guardar cliente";
@@ -129,7 +129,7 @@ public class ClienteController {
     public String verCliente(@PathVariable Long id,Model model,RedirectAttributes flash){
         Optional<Cliente> cliente=clienteService.buscarCliente(id);
         if(cliente.isEmpty()){
-            flash.addFlashAttribute("error", "El cliente no existe!");
+            flash.addFlashAttribute("danger", "El cliente no existe!");
             return "redirect:/listar";
         }
         model.addAttribute("cliente",cliente);

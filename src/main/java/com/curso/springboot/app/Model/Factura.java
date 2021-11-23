@@ -5,6 +5,7 @@ import net.bytebuddy.matcher.InstanceTypeMatcher;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +18,8 @@ public class Factura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer folio;
+
+    @NotEmpty
     private String descripcion;
     private String observacion;
 
@@ -25,7 +27,7 @@ public class Factura {
     private Cliente cliente;
 
 
-    @NotNull
+
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
     //@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -55,13 +57,6 @@ public class Factura {
     }
 
 
-    public Integer getFolio() {
-        return folio;
-    }
-
-    public void setFolio(Integer folio) {
-        this.folio = folio;
-    }
 
     public String getDescripcion() {
         return descripcion;
@@ -96,7 +91,7 @@ public class Factura {
     }
 
     public void addItemFactura(ItemFactura itemFactura){
-        this.itemFacturas=itemFacturas;
+        this.itemFacturas.add(itemFactura);
     }
 
 

@@ -35,6 +35,13 @@ public class ItemFactura {
         this.cantidad = cantidad;
     }
 
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
 
     public double calcularImporte(){
         return cantidad.longValue() * producto.getPrecio();
