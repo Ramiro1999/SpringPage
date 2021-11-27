@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head"></head>
 <body>
 <header th:replace="layout/layout :: header"></header>
@@ -11,7 +11,7 @@
         <div class="card-body">
 
             <h4 class="card-title">
-                <a class="btn btn-primary btn xs" th:href="@{/factura/form/}+${cliente.get().id}" th:text="'Crear factura'"></a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn xs" th:href="@{/factura/form/}+${cliente.get().id}" th:text="'Crear factura'"></a>
             </h4>
 
 
@@ -33,8 +33,8 @@
                     <th>Descripción</th>
                     <th>Fecha</th>
                     <th>Total</th>
-                    <th>Ver</th>
-                    <th>Eliminar</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,8 +43,8 @@
                     <td th:text="${factura.descripcion}">
                     <td th:text="${#calendars.format(factura.fecha,'dd/MM/yyyy')}">
                     <td th:text="${factura.total}+'$'"></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{'/factura/ver/'  + ${factura.getId()}}"><i class="fas fa-search"></i></a></td>
-                    <td><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/'  + ${factura.getId()}}" onclick="return confirm('Está seguro que desea eliminar la factura?')"><i class="far fa-trash-alt"></i></a></td>
+                    <td><a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/factura/ver/'  + ${factura.getId()}}"><i class="fas fa-search"></i></a></td>
+                    <td><a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/'  + ${factura.getId()}}" onclick="return confirm('Está seguro que desea eliminar la factura?')"><i class="far fa-trash-alt"></i></a></td>
                 </tr>
                 </tbody>
 

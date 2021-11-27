@@ -1,12 +1,13 @@
 package com.curso.springboot.app.Model;
 
 
-import net.bytebuddy.matcher.InstanceTypeMatcher;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Factura {
     private String observacion;
 
     @ManyToOne(fetch = FetchType.LAZY) //relacion bidireccional
+    @JsonBackReference
     private Cliente cliente;
 
 

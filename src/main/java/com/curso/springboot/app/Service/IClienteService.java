@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface IClienteService {
 
+    public List<Cliente> findAll2();
+
     public Page<Cliente> findAll(Pageable pageable);
 
     public void save(Cliente cliente);

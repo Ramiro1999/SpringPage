@@ -14,6 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +33,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -43,15 +49,30 @@ public class ClienteController {
     @Autowired
     private IUploadFileService uploadFileService;
 
-    @GetMapping("/listar")
-    public String listar(@RequestParam(name = "page",defaultValue = "0") int page, Model model){
-        Pageable pageRequest = PageRequest.of(page,4);
+    @GetMapping("/listar-rest")
+    public @ResponseBody List<Cliente> listarRest() {   //API REST, el listado de los clientes se va a almacenar en el cuerpo de la respuesta
+        //de forma automatica al guardarse spring va a deducir que es un rest, puede ser json o xml
 
-        PageRender<Cliente> pageRender = new PageRender<>("/listar",clienteService.findAll(pageRequest));
-        model.addAttribute("titulo","Listado de clientes");
-        model.addAttribute("clientes", clienteService.findAll(pageRequest));
-        model.addAttribute("page",pageRender);
-        model.addAttribute("clienteDNI",new Cliente());
+        return clienteService.findAll2();
+    }
+
+
+
+    @GetMapping({"/listar","/"})
+    public String listar(@RequestParam(name = "page",defaultValue = "0") int page, Model model,
+      @RequestParam(name = "format", defaultValue = "html") String format){
+        Pageable pageRequest = PageRequest.of(page,4);
+        if(format.equals("json") ){
+            List<Cliente> clientes = clienteService.findAll2();
+            model.addAttribute("clientes", clientes);
+
+        }else {
+            PageRender<Cliente> pageRender = new PageRender<>("/listar", clienteService.findAll(pageRequest));
+            model.addAttribute("titulo", "Listado de clientes");
+            model.addAttribute("clientes", clienteService.findAll(pageRequest));
+            model.addAttribute("page", pageRender);
+            model.addAttribute("clienteDNI", new Cliente());
+        }
         return "listar";
     }
 
@@ -101,9 +122,10 @@ public class ClienteController {
     @PostMapping("/form") // el valid sirve para validar si hay algun error, las validaciones las declare en el Model Cliente por ej @NotEmpty
     public String guardarCliente(@Valid @ModelAttribute Cliente cliente, BindingResult result, Model model, @RequestParam("file")MultipartFile foto, RedirectAttributes flash, SessionStatus status)  {
         String mensaje= (cliente.getId() != null)?"Editar cliente":"Guardar cliente";
+        String mensaje2 = (cliente.getId() != null)?"Editar cliente":"Formulario de cliente";
         if(result.hasErrors()) {
             model.addAttribute("mensaje",mensaje);
-            model.addAttribute("titulo", "Formulario de cliente");
+            model.addAttribute("titulo", mensaje2);
             return "form";
 
         }
@@ -166,6 +188,9 @@ public class ClienteController {
         return "listar";
 
     }
+
+
+
 
 //ResponseEntity permite agregar contenido a la respuesta, en este caso un objeto que representa el contenido stream
 // (flujo de datos) de la imagen,

@@ -27,6 +27,11 @@ public class IClienteServiceImp implements IClienteService {
     private FacturaRepository facturaRepository;
 
     @Override
+    public List<Cliente> findAll2() {
+        return (List<Cliente>) clienteRepository.findAll();
+    }
+
+    @Override
     public Page<Cliente> findAll(Pageable pageable) {
         return clienteRepository.findAll(pageable);
     }

@@ -1,6 +1,8 @@
 package com.curso.springboot.app.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class ItemFactura {
 
 
     @ManyToOne(fetch = FetchType.LAZY) //unidireccional
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Producto producto;
 
 
@@ -43,8 +46,8 @@ public class ItemFactura {
         this.producto = producto;
     }
 
-    public double calcularImporte(){
-        return cantidad.longValue() * producto.getPrecio();
+    public float calcularImporte(){
+        return (float) (cantidad.longValue() * producto.getPrecio());
     }
 
 }
