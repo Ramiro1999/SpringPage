@@ -30,4 +30,4 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       #Run Tests
       - name: Run Tests
-        run: cd ./SpringPage; mvn clean install -f pom.xml ; mvn -B test
+        run: mvn clean install -f pom.xml ; mvn -B test
